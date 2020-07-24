@@ -1,0 +1,7 @@
+# Database configuration
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+
+# Path to backend dir
+BACKEND_DIR=path/to/backend/dir

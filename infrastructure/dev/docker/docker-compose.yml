@@ -1,0 +1,40 @@
+version: "3.3"
+# ---
+# Specifies each network that are available to all services. Services will only be
+# able to contact each other when they're under the same service.
+networks:
+  backend:
+
+# ---
+services:
+  db:
+    image: mdillon/postgis
+    container_name: walleteye-db
+    tty: true
+    networks:
+      - backend
+    ports:
+      - "127.0.0.1:5432:5432"
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+  php:
+    container_name: walleteye-php
+    # Enable container access via terminal.
+    tty: true
+    # This specifies the directory that you will be in once you /bin/sh into this
+    # container.
+    working_dir: /var/www/html
+    build:
+      context: ./php
+    volumes:
+      - ${BACKEND_DIR}/:/var/www/html
+    ports:
+      - "80:80"
+    networks:
+      - backend
+
